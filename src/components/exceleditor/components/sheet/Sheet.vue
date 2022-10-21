@@ -275,10 +275,8 @@ export default {
             this.freezeWindow(this.freezeRow, this.freezeColumn);
 
             // 判断合并单元格是否为空
-            debugger;
             const _this = this;
             _.map(this.merges, (item) => {
-                debugger;
                 if (typeof _this.cells[item.start.rowIndex] == 'undefined') {
                     const temp = [];
                     for (let i = 0; i < item.start.columnIndex; i++) {
@@ -292,6 +290,10 @@ export default {
                             _this.cells[item.start.rowIndex].push(null);
                         }
                         _this.cells[item.start.rowIndex].push({ v: undefined });
+                    } else {
+                        if (!_this.cells[item.start.rowIndex][item.start.columnIndex]) {
+                            _this.cells[item.start.rowIndex].splice(item.start.columnIndex, 1, { v: undefined })
+                        }
                     }
                 }
             });
