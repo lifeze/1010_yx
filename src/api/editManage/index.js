@@ -7,7 +7,7 @@ import request from '@/utils/request';
  */
 export function fileList(query) {
   return request({
-    url: '/workflow/fileInfo/list',
+    url: '/fileInfo/list',
     method: 'get',
     params: query
   })
@@ -18,7 +18,7 @@ export function fileList(query) {
  */
 export function getConstants(query) {
   return request({
-    url: '/workflow/wfForm/user/getConstants',
+    url: '/wfForm/user/getConstants',
     method: 'get',
     params: query
   })
@@ -30,7 +30,7 @@ export function getConstants(query) {
  */
 export function getDBData(query) {
   return request({
-    url: '/workflow/wfForm/user/db/list',
+    url: '/wfForm/user/db/list',
     method: 'post',
     params: query,
     headers: {
@@ -47,7 +47,7 @@ export function getDBData(query) {
  */
  export function deleteFormData(data) {
   return request({
-    url: '/workflow/template/deleteFormData',
+    url: '/template/deleteFormData',
     method: 'post',
     data: data
   })
@@ -60,7 +60,7 @@ export function getDBData(query) {
  */
  export function updateFormData(data) {
   return request({
-    url: '/workflow/template/updateFormData',
+    url: '/template/updateFormData',
     method: 'post',
     data: data
   })
@@ -73,7 +73,7 @@ export function getDBData(query) {
  */
  export function updateFormDataNew(data) {
   return request({
-    url: '/workflow/template/updateFormDataNew',
+    url: '/template/updateFormDataNew',
     method: 'post',
     data: data
   })
@@ -86,7 +86,7 @@ export function getDBData(query) {
  */
  export function saveFormData(data) {
   return request({
-    url: '/workflow/template/saveFormDataNew',
+    url: '/template/saveFormDataNew',
     method: 'post',
     data: data
   })
@@ -99,7 +99,7 @@ export function getDBData(query) {
  */
 export function saveFormData_old(data) {
   return request({
-    url: '/workflow/template/saveFormData',
+    url: '/template/saveFormData',
     method: 'post',
     data: data
   })
@@ -112,7 +112,7 @@ export function saveFormData_old(data) {
  */
 export function templateList(query) {
   return request({
-    url: '/workflow/template/list',
+    url: '/template/list',
     method: 'get',
     params: query
   })
@@ -125,7 +125,7 @@ export function templateList(query) {
  */
 export function addTemplate(data) {
   return request({
-    url: '/workflow/template',
+    url: '/template',
     method: 'post',
     data: data
   })
@@ -138,7 +138,7 @@ export function addTemplate(data) {
  */
 export function getDBTable(query) {
   return request({
-    url: '/workflow/wfForm/db/list',
+    url: '/wfForm/db/list',
     method: 'get',
     params: query,
   })
@@ -151,7 +151,7 @@ export function getDBTable(query) {
  */
 export function getTableFieldByName_old(query) {
   return request({
-    url: '/workflow/wfForm/fieldList',
+    url: '/wfForm/fieldList',
     method: 'post',
     params: query,
     interval: true,
@@ -168,7 +168,7 @@ export function getTableFieldByName_old(query) {
  */
 export function getTableFieldByName(query) {
   return request({
-    url: '/workflow/wfForm/fieldListNew',
+    url: '/wfForm/fieldListNew',
     method: 'post',
     params: query,
     interval: true,
@@ -185,7 +185,7 @@ export function getTableFieldByName(query) {
  */
 export function updateTemplate(data) {
   return request({
-    url: '/workflow/template',
+    url: '/template',
     method: 'put',
     data: data
   })
@@ -198,7 +198,7 @@ export function updateTemplate(data) {
  */
 export function delTemplateById(id) {
   return request({
-    url: '/workflow/template/' + id,
+    url: '/template/' + id,
     method: 'delete',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -213,7 +213,7 @@ export function delTemplateById(id) {
  */
 export function getTemplateInfoById(id) {
   return request({
-    url: '/workflow/template/' + id + '?&tiemstamp=' + (new Date().getTime()),
+    url: '/template/' + id + '?&tiemstamp=' + (new Date().getTime()),
     method: 'get',
   })
 }
