@@ -14,9 +14,16 @@
             style="height: 100%;"
             v-if="cellType == 'text' || cellType == 'password' || cellType == 'number'"
         >
-            <el-input type="text" :ref="cellType" v-model="value" @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'text'" />
-            <el-input type="text" :ref="cellType" show-password @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'password'" />
-            <el-input-number :ref="cellType" type="text" @change="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'number'" />
+            <del v-if="!!cell.style.css.textDel">
+                <el-input type="text" :style="styleCpn(cell.style.css)" :ref="cellType" v-model="value" @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'text'" />
+                <el-input-number :style="styleCpn(cell.style.css)" :ref="cellType" type="text" @change="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'number'" />
+                <el-input :style="styleCpn(cell.style.css)" type="text" :ref="cellType" show-password @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'password'" />
+            </del>
+            <template v-else>
+                <el-input type="text" :style="styleCpn(cell.style.css)" :ref="cellType" v-model="value" @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'text'" />
+                <el-input-number :style="styleCpn(cell.style.css)" :ref="cellType" type="text" @change="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'number'" />
+                <el-input :style="styleCpn(cell.style.css)" type="text" :ref="cellType" show-password @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'password'" />
+            </template>
         </div>
 		<el-upload
 			v-if="cellType == 'upload'"
@@ -39,7 +46,7 @@
 		</el-upload>
 		
 		<el-image v-if="cellType == 'image'" :src="value | getImgUrl"></el-image>
-		<el-button :type="cellProps.t == 'text' ? 'text' : 'primary'" :style="setBtnStyle(cell.style.css)" v-if="cellType == 'button'" >{{value}}</el-button>
+        <el-button :type="cellProps.t == 'text' ? 'text' : 'primary'" :ref="cellType" :style="setBtnStyle(cell.style.css)" v-if="cellType == 'button'">{{value}}</el-button>
         <el-date-picker
             v-if="cellType == 'datetime'"
             v-model="value"
@@ -103,7 +110,7 @@
             </template>
         </div>
 		<div 
-            class="meg-cellval" 
+            class="meg-cellval"
             :class="[cell.style.alignCss]"
             :style="!!cell.style.css.textDecoration && cell.style.css.textDecoration == 'underline' ? { textDecoration: 'underline' } : {}" 
             v-if="cellType == 'Cell'"
@@ -180,6 +187,36 @@ export default {
         });
     },
     methods: {
+        styleCpn(css) {
+            const temp = {
+                display: 'flex'
+            };
+            if (!!css.fontSize) {
+                Object.assign(temp, { fontSize: css.fontSize });
+            }
+            if (!!css.backgroundColor) {
+                Object.assign(temp, { backgroundColor: css.backgroundColor });
+            }
+            if (this.cellType == 'text' || this.cellType == 'password') {
+                this.$nextTick(() => {
+                    this.$refs[this.cellType].$el.children[0].style.color = css.color || '';
+                    this.$refs[this.cellType].$el.children[0].style.fontWeight = css.fontWeight || '';
+                    this.$refs[this.cellType].$el.children[0].style.fontStyle = css.fontStyle || '';
+                    this.$refs[this.cellType].$el.children[0].style.fontFamily = css.fontFamily || '';
+                })
+            }
+            if (this.cellType == 'number') {
+                this.$nextTick(() => {
+                    this.$refs[this.cellType].$el.children[2].style.fontSize = css.fontSize || '';
+                    this.$refs[this.cellType].$el.children[2].style.backgroundColor = css.backgroundColor || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.color = css.color || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.fontWeight = css.fontWeight || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.fontStyle = css.fontStyle || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.fontFamily = css.fontFamily || '';
+                })
+            }
+            return temp;
+        },
         // 回车去除焦点
         handleInputEnter() {
             if (this.cellType == 'number') {
@@ -190,13 +227,38 @@ export default {
         },
         setBtnStyle(style) {
             const styleTemp = JSON.parse(JSON.stringify(style));
-            const temp = {};
+            const temp = {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            };
+            if (!!styleTemp.fontSize) {
+                Object.assign(temp, { fontSize: style.fontSize });
+            }
             if (!!styleTemp.backgroundColor) {
                 Object.assign(temp, { borderColor: style.backgroundColor, backgroundColor: style.backgroundColor });
             }
             if (!!styleTemp.color) {
                 Object.assign(temp, { color: style.color });
             }
+            if (!!styleTemp.fontWeight) {
+                Object.assign(temp, { fontWeight: style.fontWeight });
+            }
+            if (!!styleTemp.fontStyle) {
+                Object.assign(temp, { fontStyle: style.fontStyle });
+            }
+            if (!!styleTemp.textDecoration) {
+                Object.assign(temp, { textDecoration: style.textDecoration });
+            }
+            if (!!styleTemp.fontFamily) {
+                Object.assign(temp, { fontFamily: style.fontFamily });
+            }
+            
+            // 按钮删除线
+            this.$nextTick(() => {
+                this.$refs[this.cellType].$el.children[0].style.textDecoration = !!styleTemp.textDel ? 'line-through' : '';
+            })
+
             return temp;
         },
         handlePreview(){},
