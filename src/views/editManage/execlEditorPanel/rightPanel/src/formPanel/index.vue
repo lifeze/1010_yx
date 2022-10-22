@@ -279,6 +279,7 @@ export default {
 			headers: {
 					Authorization: "Bearer " + getToken(),
 			},
+			selection: undefined,
     };
   },
 	filters: {
@@ -512,10 +513,10 @@ export default {
 		},
     // 表单信息修改
     change() {
-			this.$rightPanel.formChange(this.form);
+			this.$rightPanel.formChange(this.form, this.selection);
 		},
     // 重置表单信息
-		resetForm() {
+		resetForm(selection) {
 			this.form = {
 				componentType: 'Cell',
 				cellValue: '',
@@ -557,6 +558,11 @@ export default {
 				tableName: '', // 表名
 				ph: '', // 占位符
 			};
+			if (!!selection) {
+				this.selection = selection;
+			} else {
+				this.selection = undefined;
+			}
 		},
     // 上传成功
     handleAvatarSuccess(res, file) {
@@ -578,11 +584,11 @@ export default {
 			return isJPG && isLt2M;
 		},
     // 更新表单信息
-		updataForm(data) {
+		updataForm(data, selection) {
 			let temp = {
 				componentType: data.c || 'Cell',
 			};
-
+			this.selection = selection; // 单元格
 			// 默认值
 			const cellFormula = typeof(data.f) != 'undefined';
 			const formula = cellFormula ? _.$parseRefs(data.f, this.$rightPanel.selection.start) : '';

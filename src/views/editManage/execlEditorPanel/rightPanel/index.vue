@@ -123,27 +123,27 @@ export default {
 			console.log('activeName', this.activeName);
 		},
 		// 表单数据更新
-		formChange(data) {
+		formChange(data, selection) {
 			this.cellIfBtn = false;
 			if (data.componentType == 'button') {
 				this.cellIfBtn = true;
 			}
-			this.$emit('formChange', data);
+			this.$emit('formChange', Object.assign(data, { selection }));
 		},
 		// 重置表单信息
-		resetForm() {
+		resetForm(selection) {
 			this.cellIfBtn = false;
 			// this.activeName = 'attribute';
-			this.$refs.FormPanel.resetForm();
+			this.$refs.FormPanel.resetForm(selection);
 		},
 		// 更新表单信息
-		updataForm(data) {
+		updataForm(data, selection) {
 			this.cellIfBtn = false;
 			// this.activeName = 'attribute';
 			if (data && typeof data != 'undefined' && typeof data.c != 'undefined' && data.c == 'button') {
 				this.cellIfBtn = true;
 			}
-			this.$refs.FormPanel.updataForm(data);
+			this.$refs.FormPanel.updataForm(data, selection);
 		},
 		// 显示已选单元格
 		showSelectCells(data) {

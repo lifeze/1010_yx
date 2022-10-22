@@ -117,8 +117,10 @@ export default {
   },
   watch: {
     sheetIndex(newV) {
-      this.$curSheet().maxWidth = this.data[newV.substring(1)].info.screenW;
-      this.$curSheet().maxHeight = this.data[newV.substring(1)].info.screenH;
+      if (!!this.data[newV.substring(1)]) {
+        this.$curSheet().maxWidth = this.data[newV.substring(1)].info.screenW;        
+        this.$curSheet().maxHeight = this.data[newV.substring(1)].info.screenH;
+      }
     },
   },
   methods: {

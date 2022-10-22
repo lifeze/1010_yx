@@ -39,9 +39,9 @@ export default {
             this.curAction = null;
         },
         //编辑完成
-        doEditCellValue(value) {
-            this.recordChange('cellsChange', this.selection);
-            this.setCellValue(this.selection.start, value);
+        doEditCellValue(value, selection) {
+            this.recordChange('cellsChange', selection ? selection : this.selection);
+            this.setCellValue(selection ? selection.start : this.selection.start, value);
         },
         doOpenFormatpainter() {
             this.curAction = 'formatpainter';

@@ -335,8 +335,6 @@ export default {
 			}
 			return temp;
 		},
-		//保存
-		saveData() {},
 		/** 预览表单 */
 		handlePreview() {
 			// this.$router.push({path:'/home',query: {id:'1'}})
@@ -489,6 +487,10 @@ export default {
 		curCell() {
 			return this.$refs.vspread.getCurSheet()[0].getCurCell();
 		},
+		// 指定单元格
+		getCell(selection) {
+			this.$refs.vspread.getCurSheet()[0].getCell(selection.start.rowIndex, selection.start.columnIndex)
+		},
 		// 选择单元格
 		handleSelectCell() {
 			this.$nextTick(function() {
@@ -498,27 +500,27 @@ export default {
 				const curCell = this.curCell();
 				console.log('handleSelectCell curCell', curCell);
 				if(curCell != null) {
-					this.$refs.rightPanel.updataForm(curCell);
+					this.$refs.rightPanel.updataForm(curCell, JSON.parse(JSON.stringify(this.selection)));
 				} else {
-					this.$refs.rightPanel.resetForm();
+					this.$refs.rightPanel.resetForm(JSON.parse(JSON.stringify(this.selection)));
 				}
 			});
 		},
 		// 编辑单元格
-		setCell(data) {
+		setCell(data, selection) {
 			const curSheet = this.$refs.vspread.getCurSheet()[0];
 			curSheet.setUpdateCellType(null);
 			curSheet.doEditCell();
 			setTimeout(function() {
 				curSheet.doCancelEdit();
 				curSheet.setUpdateCellType(data.c);
-				curSheet.doEditCellValue(data);
+				curSheet.doEditCellValue(data, selection);
 			}, 100);
 		},
 		// 修改表单
 		handleFormChange(data) {
 			let temp = {};
-			const curCell = this.curCell();
+			const curCell = !!data.selection ? this.getCell(data.selection) : this.curCell();
 			if (curCell) {
 				['s', 'fs', 'f', 'fc', 'sv', 'fcv', 'd'].forEach(pItem => {
 					if (typeof(curCell[pItem]) != 'undefined') {
@@ -697,7 +699,7 @@ export default {
 			if (data.componentType == 'Cell') {
 				Object.assign(temp, { v: data.default });
 			}
-			this.setCell(temp);
+			this.setCell(temp, data.selection);
 		},
 		handleSelectEnd() {
 			this.$nextTick(function() {
