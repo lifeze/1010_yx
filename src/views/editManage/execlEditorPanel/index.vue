@@ -97,8 +97,6 @@ export default {
 	},
 	beforeRouteEnter(to, from, next) {
 		next(vm=>{
-			console.log('to', to);
-			console.log('from', from);
 			vm.$nextTick(() => {
 				const matched = cache.session.getJSON('DesignMatched');
 				if (!!matched && matched.length > 0) {
@@ -116,7 +114,9 @@ export default {
 					} else {
 						cache.session.setJSON('DesignMatched', vm.matched);
 					}
-					vm.matched.push({ path: '/design', meta: { title: '设计器' }});
+					if (!!vm.matched) {
+						vm.matched.push({ path: '/design', meta: { title: '设计器' }});
+					}
 				}
 			});
 		});
@@ -139,7 +139,7 @@ export default {
 			time: null, // 定时器
 			menusHeigth: 40,
 			showPanel: false,
-			matched: [], // 路由
+			matched: [{"meta":{},"path":"","redirect":"index"},{"meta":{"title":"模板管理"},"path":"/index"}], // 路由
 			tempId: '', // id
 			ifEdit: false,
 			ifEditTitle: false,
