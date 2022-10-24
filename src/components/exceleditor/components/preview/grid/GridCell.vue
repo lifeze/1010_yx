@@ -14,9 +14,16 @@
             style="height: 100%;" 
             v-if="cellType == 'text' || cellType == 'password' || cellType == 'number'"
         >
-            <el-input type="text" :ref="cellType" :disabled="!props.option.p.r.w" v-model="value" @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'text'" />
-            <el-input type="text" :ref="cellType" :disabled="!props.option.p.r.w" show-password @input="handleChange" v-model="value" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'password'" />
-            <el-input-number type="text" :ref="cellType" :disabled="!props.option.p.r.w" @change="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'number'" />
+            <del v-if="!!cell.style.css.textDel">
+                <el-input type="text" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" v-model="value" @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'text'" />
+                <el-input type="text" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" show-password @input="handleChange" v-model="value" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'password'" />
+                <el-input-number :style="styleCpn(cell.style.css)" type="text" :ref="cellType" :disabled="!props.option.p.r.w" @change="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'number'" />
+            </del>
+            <template v-else>
+                <el-input type="text" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" v-model="value" @input="handleChange" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'text'" />
+                <el-input type="text" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" show-password @input="handleChange" v-model="value" :placeholder="cellProps.ph || '请输入'" v-if="cellType == 'password'" />
+                <el-input-number :style="styleCpn(cell.style.css)" type="text" :ref="cellType" :disabled="!props.option.p.r.w" @change="handleChange" :placeholder="cellProps.ph || '请输入'" v-model="value" v-if="cellType == 'number'" />
+            </template>
         </div>
 		<el-upload
 			v-if="cellType == 'upload'"
@@ -42,6 +49,7 @@
 		<el-image v-if="cellType == 'image'" :src="value | getImgUrl"></el-image>
 		<el-button
             :type="cellProps.t == 'text' ? 'text' : 'primary'"
+            :ref="cellType"
             :style="setBtnStyle(cell.style.css)"
             v-if="cellType == 'button'"
             @click="handleCellBtnClick"
@@ -55,39 +63,18 @@
             :placeholder="cellProps.ph || '选择日期时间'"
         >
         </el-date-picker>
-		<!-- <el-date-picker
-			:value="value"
-            :disabled="!props.option.p.r.w"
-			type="datetime"
-			placeholder="选择日期时间"
-			v-if="cellType == 'datetime'">
-		</el-date-picker> -->
-		<el-date-picker
-			:value="value"
-            placement ="bottom"
-			type="date"
-			placeholder="选择日期"
-			v-if="cellType == 'date'">
-		</el-date-picker>
-        <el-date-picker
-			:value="value"
-            placement ="bottom"
-			type="time"
-			placeholder="选择时间"
-			v-if="cellType == 'time'">
-		</el-date-picker>
-		<el-radio-group v-model="value" :disabled="!props.option.p.r.w" v-if="cellType == 'radio'" @change="handleChange">
+		<el-radio-group v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" v-if="cellType == 'radio'" @change="handleChange">
 			<el-radio :label="item.value + ''" v-for="item in options" :key="item.value">{{item.label}}</el-radio>
 		</el-radio-group>
-		<el-checkbox-group v-model="value" :disabled="!props.option.p.r.w" v-if="cellType == 'checkbox'" @change="handleChange">
+		<el-checkbox-group v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" v-if="cellType == 'checkbox'" @change="handleChange">
 			<el-checkbox :label="item.value + ''" v-for="item in options" :key="item.value">{{item.label}}</el-checkbox>
 		</el-checkbox-group>
-		<el-select v-model="value" :disabled="!props.option.p.r.w" v-if="cellType == 'select'" @change="handleChange">
+		<el-select v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" v-if="cellType == 'select'" @change="handleChange">
 			<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 			</el-option>
 		</el-select>
         <!-- 下拉多选 -->
-        <el-select v-model="value" :disabled="!props.option.p.r.w" multiple v-if="cellType == 'selectMultiple'" @change="handleChange">
+        <el-select v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" :disabled="!props.option.p.r.w" multiple v-if="cellType == 'selectMultiple'" @change="handleChange">
 			<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 			</el-option>
 		</el-select>
@@ -96,6 +83,8 @@
             style="width: 100%"
             v-if="cellType == 'treeSelect'"
             :options="options"
+            :style="styleCpn(cell.style.css)"
+            :ref="cellType"
             :disabled="!props.option.p.r.w"
             :value="value"
             :clearable="true"
@@ -108,6 +97,8 @@
             v-if="cellType == 'treeSelectMultiple'"
             :options="options"
             :value="value"
+            :style="styleCpn(cell.style.css)"
+            :ref="cellType"
             :disabled="!props.option.p.r.w"
             :clearable="true"
             :accordion="true"
@@ -206,6 +197,68 @@ export default {
         });
     },
     methods: {
+        styleCpn(css) {
+            const temp = {
+                display: 'flex'
+            };
+            if (!!css.fontSize) {
+                Object.assign(temp, { fontSize: css.fontSize });
+            }
+            if (!!css.backgroundColor) {
+                Object.assign(temp, { backgroundColor: css.backgroundColor });
+            }
+            if (this.cellType == 'text' || this.cellType == 'password') {
+                this.$nextTick(() => {
+                    this.$refs[this.cellType].$el.children[0].style.color = css.color || '';
+                    this.$refs[this.cellType].$el.children[0].style.fontWeight = css.fontWeight || '';
+                    this.$refs[this.cellType].$el.children[0].style.fontStyle = css.fontStyle || '';
+                    this.$refs[this.cellType].$el.children[0].style.fontFamily = css.fontFamily || '';
+                })
+            }
+            if (this.cellType == 'number') {
+                this.$nextTick(() => {
+                    this.$refs[this.cellType].$el.children[2].style.fontSize = css.fontSize || '';
+                    this.$refs[this.cellType].$el.children[2].style.backgroundColor = css.backgroundColor || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.color = css.color || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.fontWeight = css.fontWeight || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.fontStyle = css.fontStyle || '';
+                    this.$refs[this.cellType].$el.children[2].children[0].style.fontFamily = css.fontFamily || '';
+                })
+            }
+            if (this.cellType == 'radio' || this.cellType == 'checkbox') {
+                this.$nextTick(() => {
+                    for (let i = 0; i < this.$refs[this.cellType].$el.children.length; i++) {
+                        const element = this.$refs[this.cellType].$el.children[i];
+                        element.style.color = css.color || '';
+                        element.style.fontWeight = css.fontWeight || '';
+                        element.style.fontStyle = css.fontStyle || '';
+                        element.style.fontFamily = css.fontFamily || '';
+                        element.style.display = 'flex';
+                        element.style.alignItems = 'center';
+                        element.children[0].style.display = 'flex';
+                        element.children[1].style.fontSize = css.fontSize || '';
+                        element.children[1].style.textDecoration = !!css.textDel ? 'line-through' : '';
+                    }
+                })
+            }
+            if (
+                this.cellType == 'select' ||
+                this.cellType == 'selectMultiple' ||
+                this.cellType == 'treeSelect' ||
+                this.cellType == 'treeSelectMultiple'
+            ) {
+                this.$nextTick(() => {
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontSize = css.fontSize || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.color = css.color || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontWeight = css.fontWeight || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontStyle = css.fontStyle || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontFamily = css.fontFamily || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.textDecoration = !!css.textDel ? 'line-through' : '';
+                    // this.$refs[this.cellType].$el.children[0].style.textDecoration = css.textDecoration || '';
+                });
+            }
+            return temp;
+        },
         // 回车去除焦点
         handleInputEnter() {
             if (this.cellType == 'number') {
@@ -216,13 +269,37 @@ export default {
         },
         setBtnStyle(style) {
             const styleTemp = JSON.parse(JSON.stringify(style));
-            const temp = {};
+            const temp = {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            };
+            if (!!styleTemp.fontSize) {
+                Object.assign(temp, { fontSize: style.fontSize });
+            }
             if (!!styleTemp.backgroundColor) {
                 Object.assign(temp, { borderColor: style.backgroundColor, backgroundColor: style.backgroundColor });
             }
             if (!!styleTemp.color) {
                 Object.assign(temp, { color: style.color });
             }
+            if (!!styleTemp.fontWeight) {
+                Object.assign(temp, { fontWeight: style.fontWeight });
+            }
+            if (!!styleTemp.fontStyle) {
+                Object.assign(temp, { fontStyle: style.fontStyle });
+            }
+            if (!!styleTemp.textDecoration) {
+                Object.assign(temp, { textDecoration: style.textDecoration });
+            }
+            if (!!styleTemp.fontFamily) {
+                Object.assign(temp, { fontFamily: style.fontFamily });
+            }
+            
+            // 按钮删除线
+            this.$nextTick(() => {
+                this.$refs[this.cellType].$el.children[0].style.textDecoration = !!styleTemp.textDel ? 'line-through' : '';
+            })
             return temp;
         },
         // 单元格样式

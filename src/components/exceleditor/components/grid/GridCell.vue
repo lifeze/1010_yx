@@ -57,27 +57,29 @@
         >
         </el-date-picker>
         <!-- 单选 -->
-		<el-radio-group v-model="value" v-if="cellType == 'radio'" @change="handleChange">
+		<el-radio-group v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" v-if="cellType == 'radio'" @change="handleChange">
 			<el-radio :label="item.value + ''" v-for="item in options" :key="item.value">{{item.label}}</el-radio>
 		</el-radio-group>
         <!-- 多选 -->
-		<el-checkbox-group v-model="value" v-if="cellType == 'checkbox'" @change="handleChange">
+		<el-checkbox-group v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" v-if="cellType == 'checkbox'" @change="handleChange">
 			<el-checkbox :label="item.value" v-for="item in options" :key="item.value">{{item.label}}</el-checkbox>
 		</el-checkbox-group>
         <!-- 下拉单选 -->
-		<el-select v-model="value" v-if="cellType == 'select'" @change="handleChange">
+		<el-select v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" v-if="cellType == 'select'" @change="handleChange">
 			<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 			</el-option>
 		</el-select>
         <!-- 下拉多选 -->
-        <el-select v-model="value" multiple v-if="cellType == 'selectMultiple'" @change="handleChange">
+        <el-select v-model="value" :style="styleCpn(cell.style.css)" :ref="cellType" multiple v-if="cellType == 'selectMultiple'" @change="handleChange">
 			<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 			</el-option>
 		</el-select>
         <!-- 下拉树单选 -->
         <TreeSelect
             style="width: 100%"
+            :style="styleCpn(cell.style.css)"
             v-if="cellType == 'treeSelect'"
+            :ref="cellType"
             :options="options"
             :value="value"
             :clearable="true"
@@ -87,8 +89,10 @@
         <!-- 下拉树多选 -->
         <TreeSelectMultiple
             style="width: 100%"
+            :style="styleCpn(cell.style.css)"
             v-if="cellType == 'treeSelectMultiple'"
             :options="options"
+            :ref="cellType"
             :value="value"
             :clearable="true"
             :accordion="true"
@@ -214,6 +218,38 @@ export default {
                     this.$refs[this.cellType].$el.children[2].children[0].style.fontStyle = css.fontStyle || '';
                     this.$refs[this.cellType].$el.children[2].children[0].style.fontFamily = css.fontFamily || '';
                 })
+            }
+            if (this.cellType == 'radio' || this.cellType == 'checkbox') {
+                this.$nextTick(() => {
+                    for (let i = 0; i < this.$refs[this.cellType].$el.children.length; i++) {
+                        const element = this.$refs[this.cellType].$el.children[i];
+                        element.style.color = css.color || '';
+                        element.style.fontWeight = css.fontWeight || '';
+                        element.style.fontStyle = css.fontStyle || '';
+                        element.style.fontFamily = css.fontFamily || '';
+                        element.style.display = 'flex';
+                        element.style.alignItems = 'center';
+                        element.children[0].style.display = 'flex';
+                        element.children[1].style.fontSize = css.fontSize || '';
+                        element.children[1].style.textDecoration = !!css.textDel ? 'line-through' : '';
+                    }
+                })
+            }
+            if (
+                this.cellType == 'select' ||
+                this.cellType == 'selectMultiple' ||
+                this.cellType == 'treeSelect' ||
+                this.cellType == 'treeSelectMultiple'
+            ) {
+                this.$nextTick(() => {
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontSize = css.fontSize || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.color = css.color || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontWeight = css.fontWeight || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontStyle = css.fontStyle || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.fontFamily = css.fontFamily || '';
+                    this.$refs[this.cellType].$el.children[0].children[0].style.textDecoration = !!css.textDel ? 'line-through' : '';
+                    // this.$refs[this.cellType].$el.children[0].style.textDecoration = css.textDecoration || '';
+                });
             }
             return temp;
         },
