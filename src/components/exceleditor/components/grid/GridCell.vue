@@ -49,6 +49,8 @@
         <el-button :type="cellProps.t == 'text' ? 'text' : 'primary'" :ref="cellType" :style="setBtnStyle(cell.style.css)" v-if="cellType == 'button'">{{value}}</el-button>
         <el-date-picker
             v-if="cellType == 'datetime'"
+            :ref="cellType"
+            :style="styleCpn(cell.style.css)"
             v-model="value"
             type="datetime"
             @change="handleChangeDate"
@@ -201,13 +203,16 @@ export default {
             if (!!css.backgroundColor) {
                 Object.assign(temp, { backgroundColor: css.backgroundColor });
             }
-            if (this.cellType == 'text' || this.cellType == 'password') {
+            if (this.cellType == 'text' || this.cellType == 'password'|| this.cellType == 'datetime') {
                 this.$nextTick(() => {
                     this.$refs[this.cellType].$el.children[0].style.color = css.color || '';
                     this.$refs[this.cellType].$el.children[0].style.fontWeight = css.fontWeight || '';
                     this.$refs[this.cellType].$el.children[0].style.fontStyle = css.fontStyle || '';
                     this.$refs[this.cellType].$el.children[0].style.fontFamily = css.fontFamily || '';
-                })
+                    if (this.cellType == 'datetime') {
+                        this.$refs[this.cellType].$el.children[0].style.textDecoration = !!css.textDel ? 'line-through' : '';
+                    }
+                });
             }
             if (this.cellType == 'number') {
                 this.$nextTick(() => {
@@ -583,6 +588,7 @@ export default {
     .el-date-editor .el-input__prefix .el-input__icon.el-icon-time,
     .el-date-editor .el-input__suffix .el-input__suffix-inner .el-input__icon {
         line-height: 100% !important;
+        font-size: 14px !important;
     }
 }
 
