@@ -1,5 +1,5 @@
 <template>
-    <div tabIndex="999" class="meg-workbook" @parse="handleParse" @keydown="handleKeyMap">
+    <div tabIndex="999" class="meg-workbook" ref="megWorkbook" @parse="handleParse" @keydown="handleKeyMap">
         <div style="display: flex; align-items: center;">
             <Menus v-if="menu" class="meg-workbook-menu" ref="menus" style="width: calc(100% - 200px); max-width: 100%; flex: 1; flex-wrap: wrap; height: auto; min-height: 40px;"/>
             <div class="meg-workbook-btn">
@@ -24,6 +24,7 @@
                     @selectEnd="selectEnd"
                     style="height: 100%;"
                     @click-head="handleClickHead"
+                    @EditEnter="handleEditEnter"
                     :ref="'sheet_'+index"
                     :options="sheet.data"
                     :sheetIndex="index"
@@ -140,6 +141,11 @@ export default {
         },
     },
     methods: {
+        // 获取焦点，用于回车换下一个单元格
+        handleEditEnter() {
+            // debugger;
+            this.$refs.megWorkbook.focus();
+        },
         //　创建副本
         copyTabsItem(index) {
             if (!!this.data[index]) {

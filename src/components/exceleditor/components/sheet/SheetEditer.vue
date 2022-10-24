@@ -137,6 +137,7 @@ export default {
             }
             this.$sheet.$emit('selectCell');
             this.$sheet.doEditCellValue(v);
+            this.$sheet.$emit('EditEnter');
         }
     }
 };

@@ -55,6 +55,7 @@
             type="datetime"
             @change="handleChangeDate"
             @focus="handleDateFocus"
+            @blur="handleDateBlur"
             :placeholder="cellProps.ph || '选择日期时间'"
         >
         </el-date-picker>
@@ -260,6 +261,7 @@ export default {
         },
         // 回车去除焦点
         handleInputEnter() {
+            this.$sheet.$emit('EditEnter');
             if (this.cellType == 'number') {
                 this.$el.querySelector('.el-input__inner').blur();
                 return;
@@ -524,6 +526,9 @@ export default {
         // 日期组件获取焦点
         handleDateFocus() {
             this.cellPos = JSON.parse(JSON.stringify(this.$sheet.selctionExpand));
+        },
+        handleDateBlur() {
+            this.$sheet.$emit('EditEnter');
         },
         // 日期变更
         handleChangeDate(e) {

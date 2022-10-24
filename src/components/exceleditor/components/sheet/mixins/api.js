@@ -42,6 +42,7 @@ export default {
         doEditCellValue(value, selection) {
             this.recordChange('cellsChange', selection ? selection : this.selection);
             this.setCellValue(selection ? selection.start : this.selection.start, value);
+            // this.doMoveSelected('down');
         },
         doOpenFormatpainter() {
             this.curAction = 'formatpainter';
@@ -177,6 +178,7 @@ export default {
         },
         //移动光标
         doMoveSelected(direction) {
+            console.warn('doMoveSelected');
             const start = Object.assign({}, this.tempMoveSelectionPos);
             switch (direction) {
                 case 'up': {
