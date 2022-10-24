@@ -622,6 +622,7 @@ export default {
     .el-date-editor .el-input__prefix .el-input__icon.el-icon-time,
     .el-date-editor .el-input__suffix .el-input__suffix-inner .el-input__icon {
         line-height: 100% !important;
+        font-size: 14px !important;
     }
 }
 
