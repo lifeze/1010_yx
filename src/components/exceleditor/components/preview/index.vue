@@ -1304,7 +1304,7 @@ export default {
           }
         } else {
           // 跟随扩展单元，非数据绑定
-          if (!!temp.c && temp.c == 'Cell' && !!temp.p.ct && temp.p.ct == 'Link') {
+          if (!!temp.c && temp.c == 'Cell' && !!temp.p && !!temp.p.ct && temp.p.ct == 'Link') {
             const itemPost = item.pos;
             if (!!temp.p.cl) {
               const fields = temp.p.cl.match(/\$\{[a-zA-Z]*[0-9]*\:[a-zA-Z]*[0-9]*\}|\$\{[a-zA-Z]*[0-9]*\}/g);
